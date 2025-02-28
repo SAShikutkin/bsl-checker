@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px;
+}
+
+textarea {
+  flex: 1;
+  font-family: monospace;
+  font-size: 14px;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  overflow: auto;
+}
+
+button {
+  margin: 10px 0;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#output {
+  height: 150px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-family: monospace;
+}
+
+.error-line {
+  cursor: pointer;
+  color: red;
+}
+
+.warning-line {
+  cursor: pointer;
+  color: orange;
+}
+
+.footer {
+  padding: 10px;
+}
+
+.footer-links {
+  text-align: center;
+}
+
+.footer-links a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.footer-links a:last-child {
+  margin-right: 0;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}

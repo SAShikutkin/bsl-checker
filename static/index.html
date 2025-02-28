@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Проверка кода 1С</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Проверка кода 1С</h1>
+  </div>
+  <div class="container">
+    <textarea id="code" placeholder="Введите код на 1С..."></textarea>
+    <button id="check-button">Проверить код</button>
+    <div id="output"></div>
+  </div>
+  <div class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/SAShikutkin/bsl-checker" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://github.com/1c-syntax/bsl-language-server" target="_blank" rel="noopener noreferrer">BSL LS</a>
+    </div>
+  </div>
+  <script>
+    document.getElementById('check-button').addEventListener('click', async () => {
+      const code = document.getElementById('code').value;
+      const output = document.getElementById('output');
+      output.textContent = 'Проверка...';
+
+      try {
+        const response = await fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+
+        const result = await response.json();
+        if (result.errors.length === 0) {
+          output.textContent = 'Ошибок не найдено!';
+        } else {
+          output.innerHTML = result.errors.map(error => {
+            const lineInfo = error.split(' ')[1];
+            return `<div class="error-line" data-line="${lineInfo.slice(0, -1)}">${error}</div>`;
+          }).join('');
+        }
+      } catch (error) {
+        output.textContent = 'Ошибка: ' + error.message;
+      }
+    });
+
+    document.getElementById('output').addEventListener('click', (event) => {
+      if (event.target.classList.contains('error-line')) {
+        const lineInfo = event.target.getAttribute('data-line');
+        const line = parseInt(lineInfo, 10);
+        const codeArea = document.getElementById('code');
+        const lines = codeArea.value.split('\n');
+
+        if (line > 0 && line <= lines.length) {
+          const start = codeArea.value.indexOf(lines[line - 1]);
+
+          // Проверка на пустую строку
+          if (start !== -1 || lines[line - 1].trim() === '') {
+            const emptyLineStart = codeArea.value.split('\n').slice(0, line - 1).join('\n').length + (line - 1);
+            codeArea.setSelectionRange(emptyLineStart, emptyLineStart);
+            codeArea.focus();
+            codeArea.scrollTop = (line - 1) * parseInt(getComputedStyle(codeArea).lineHeight, 10);
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
